@@ -1,13 +1,10 @@
 import type {
 	executions,
-	optionCallbacksFile,
-	optionCallbacksPipe,
 	optionPath,
 } from "files-pipeline/dist/options/index.js";
 
 import formatBytes from "./lib/format-bytes.js";
 
-import { optimize as svgo } from "svgo";
 import deepmerge from "files-pipeline/dist/lib/deepmerge.js";
 
 import type { AstroIntegration } from "astro";
@@ -22,11 +19,13 @@ import { files } from "files-pipeline";
 import { minify as csso } from "csso";
 import { minify as htmlMinifierTerser } from "html-minifier-terser";
 import sharp from "sharp";
+import { optimize as svgo } from "svgo";
 import { minify as terser } from "terser";
+
 import type { Output } from "svgo";
+import type { currentSharp } from "./lib/sharp-read.js";
 
 import sharpRead from "./lib/sharp-read.js";
-import type { currentSharp } from "./lib/sharp-read.js";
 
 export default (options: Options = {}): AstroIntegration => {
 	for (const option in options) {
@@ -50,15 +49,17 @@ export default (options: Options = {}): AstroIntegration => {
 			for (const path of options["path"]) {
 				paths.add(path);
 			}
-		} else {
-			paths.add(options["path"]);
 		}
 	}
 
 	return {
 		name: "astro-compress",
 		hooks: {
-			"astro:build:done": async () => {
+			"astro:build:done": async ({ dir }) => {
+				if (!paths.size) {
+					paths.add(dir);
+				}
+
 				for (const [fileType, setting] of Object.entries(options)) {
 					if (!setting) {
 						continue;
@@ -70,35 +71,14 @@ export default (options: Options = {}): AstroIntegration => {
 								await (
 									await new files(options["logger"]).in(path)
 								).by(
-									(() => {
-										switch (fileType) {
-											case "css":
-												return "**/*.css";
-
-											case "html":
-												return "**/*.html";
-
-											case "js":
-												return "**/*.{js,mjs,cjs}";
-
-											case "img":
-												return "**/*.{avci,avcs,avif,avifs,gif,heic,heics,heif,heifs,jfif,jif,jpe,jpeg,jpg,apng,png,raw,tiff,webp}";
-
-											case "svg":
-												return "**/*.svg";
-
-											case "json":
-												return "**/*.json";
-
-											default:
-												return "";
-										}
-									})()
+									typeof options["map"] === "object"
+										? options["map"][fileType]
+										: ""
 								)
 							).not(options["exclude"])
 						).pipeline(
-							deepmerge(defaultsCompress["pipeline"], {
-								wrote: async (current: currentSharp) => {
+							deepmerge(options["pipeline"], {
+								wrote: async (current) => {
 									switch (fileType) {
 										case "css": {
 											return csso(
@@ -143,17 +123,12 @@ export default (options: Options = {}): AstroIntegration => {
 											return current.buffer;
 										}
 
-										case "json": {
-											return JSON.stringify(
-												current.buffer.toString()
-											);
-										}
-
-										default:
+										default: {
 											return current.buffer;
+										}
 									}
 								},
-								read: async (current: optionCallbacksFile) => {
+								read: async (current) => {
 									switch (fileType) {
 										case "img": {
 											const { format } = await sharp(
@@ -166,21 +141,20 @@ export default (options: Options = {}): AstroIntegration => {
 												unlimited: true,
 												animated:
 													format === "webp" ||
-													format === "gif" ||
-													format === "apng"
+													format === "gif"
 														? true
 														: false,
 											});
 										}
 
 										default: {
-											return await defaults.pipeline.read(
-												current
-											);
+											return await defaults[
+												"pipeline"
+											].read(current);
 										}
 									}
 								},
-								fulfilled: async (pipe: optionCallbacksPipe) =>
+								fulfilled: async (pipe) =>
 									pipe.files > 0
 										? `Successfully compressed a total of ${
 												pipe.files

@@ -1,3 +1,24 @@
+## 1.1.32
+
+-   Revert bug fix
+
+## 1.1.31
+
+-   Bug fix
+
+## 1.1.30
+
+-   Enhancement
+
+## 1.1.29
+
+-   Cleanup
+
+## 1.1.28
+
+-   Cleanup
+-   Removes JSON compression
+
 ## 1.1.27
 
 -   Bug fix

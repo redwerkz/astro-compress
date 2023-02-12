@@ -1,14 +1,14 @@
 import type {
-	WebpOptions,
-	TiffOptions,
-	PngOptions,
-	JpegOptions,
-	HeifOptions,
-	GifOptions,
 	AvifOptions,
+	GifOptions,
+	HeifOptions,
+	JpegOptions,
+	PngOptions,
+	TiffOptions,
+	WebpOptions,
 } from "sharp";
 
-export default interface IMG {
+export interface IMG {
 	[key: string]:
 		| boolean
 		| AvifOptions
@@ -33,3 +33,35 @@ export default interface IMG {
 
 	webp?: boolean | WebpOptions;
 }
+
+export default {
+	avif: {
+		chromaSubsampling: "4:4:4",
+		// rome-ignore lint/nursery/noPrecisionLoss:
+		effort: 9,
+	},
+	gif: {
+		// rome-ignore lint/nursery/noPrecisionLoss:
+		effort: 10,
+	},
+	jpeg: {
+		chromaSubsampling: "4:4:4",
+		mozjpeg: true,
+		trellisQuantisation: true,
+		overshootDeringing: true,
+		optimiseScans: true,
+	},
+	png: {
+		// rome-ignore lint/nursery/noPrecisionLoss:
+		compressionLevel: 9,
+		palette: true,
+	},
+	raw: {},
+	tiff: {
+		compression: "lzw",
+	},
+	webp: {
+		// rome-ignore lint/nursery/noPrecisionLoss:
+		effort: 6,
+	},
+} satisfies IMG;
