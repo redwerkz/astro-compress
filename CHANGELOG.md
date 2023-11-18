@@ -1,3 +1,173 @@
+## 2.2.3
+
+-   Cleanup
+
+## 2.2.2
+
+-   Cleanup
+
+## 2.2.1
+
+-   Bug fix
+
+## 2.2.0
+
+-   Bug fix
+-   Refactor allowing multiple parsers
+
+## 2.1.6
+
+-   Cleanup
+
+## 2.1.5
+
+-   Cleanup
+
+## 2.1.4
+
+-   Bug fix
+
+## 2.1.3
+
+-   Bug fix
+
+## 2.1.2
+
+-   Bug fix
+
+## 2.1.1
+
+-   Cleanup
+
+## 2.1.0
+
+-   Refactor
+-   Documentation
+
+## 2.0.15
+
+-   Cleanup
+
+## 2.0.14
+
+-   Cleanup
+
+## 2.0.13
+
+-   Cleanup
+
+## 2.0.12
+
+-   Cleanup
+
+## 2.0.11
+
+-   Cleanup
+
+## 2.0.10
+
+-   Cleanup
+
+## 2.0.9
+
+-   Cleanup
+
+## 2.0.8
+
+-   Cleanup
+
+## 2.0.7
+
+-   Cleanup
+
+## 2.0.6
+
+-   Cleanup
+
+## 2.0.5
+
+-   Cleanup
+
+## 2.0.4
+
+-   Cleanup
+
+## 2.0.2
+
+-   Cleanup
+
+## 2.0.1
+
+-   Restoration
+
+## 1.1.50
+
+-   Cleanup
+
+## 1.1.49
+
+-   Bug fix
+
+## 1.1.48
+
+-   Cleanup
+
+## 1.1.47
+
+-   Bug fix
+
+## 1.1.46
+
+-   Cleanup
+
+## 1.1.45
+
+-   Cleanup
+
+## 1.1.44
+
+-   Cleanup
+
+## 1.1.43
+
+-   Bug fix
+
+## 1.1.42
+
+-   Bug fix
+
+## 1.1.41
+
+-   Bug fix
+
+## 1.1.40
+
+-   Version with provenance
+
+## 1.1.39
+
+-   Bug fix
+
+## 1.1.38
+
+-   Cleanup
+
+## 1.1.37
+
+-   Version with provenance
+
+## 1.1.36
+
+-   Cleanup
+
+## 1.1.35
+
+-   Switches to the files-pipe component
+
+## 1.1.34
+
+-   Updates files-pipeline component
+
 ## 1.1.33
 
 -   Process scripts enhancement
