@@ -2,8 +2,6 @@
  * @module Option
  *
  */
-import { gray, blue, green, cyan, red } from 'kleur/colors'
-
 export default (
 	await import("typescript-esbuild/Target/Function/Merge.js")
 ).default((await import("files-pipe/Target/Variable/Option.js")).default, {
@@ -27,34 +25,40 @@ export default (
 	Map: (await import("./Map.js")).default,
 	Parser: (await import("./Parser.js")).default,
 	Action: {
-		Failed: async ({ Input }) => {
-			const idx = Input.lastIndexOf('/');
-			const file = Input.slice(idx + 1);
-			const dir = Input.slice(0, idx + 1);
-			return `${red("Error:")} Cannot compress file ${gray(dir)}${red(file)}`
-		},
-		Passed: async ({ Before, Buffer: _Buffer }) =>
-			Before > Buffer.byteLength(_Buffer.toString()),
+		Failed: async ({ Input }) =>
+			`${red("Error:")} Cannot compress file ${gray(
+				await Directory(Input)
+			)}${red((await import("path")).parse(Input).base)}`,
+		Passed: async ({ Before, Buffer }) =>
+			Before > _Buffer.byteLength(Buffer.toString()),
 		Accomplished: async ({ Input, Before, After }) => {
-			const compressed = Before - After;
-			const percent = `${(((compressed) / Before) * 100).toFixed(2)}%`;
-			const size = `(-${await (await import("files-pipe/Target/Function/Bytes.js")).default(compressed)})`;
-			const idx = Input.lastIndexOf('/');
-			const file = Input.slice(idx + 1);
-			const dir = Input.slice(0, idx + 1);
-			process.stderr.write("├─ ");
-			const msg = `${gray(size)}	${green(percent)} reduction in ${gray(dir)}${blue(file)}`;
-			return msg;
+			const Saving = Before - After;
+
+			return `${gray(
+				`(-${await (
+					await import("files-pipe/Target/Function/Bytes.js")
+				).default(Saving)})`
+			)}	${(await import("kleur/colors")).green(
+				`${((Saving / Before) * 100).toFixed(2)}%`
+			)} reduction in ${gray(await Directory(Input))}${(
+				await import("kleur/colors")
+			).cyan((await import("path")).parse(Input).base)}`;
 		},
-		Changed: async (Plan) => {
-			return Object.defineProperty(Plan.Info, "Total", {
+		Changed: async (Plan) =>
+			Object.defineProperty(Plan.Info, "Total", {
 				value:
 					(Plan.Info.Total ? Plan.Info.Total : 0) +
 					(Plan.On.Before - Plan.On.After),
 				configurable: true,
-			}) && Plan
-		},
+				writable: true,
+			}) && Plan,
 	},
 } satisfies Type);
 
 import type Type from "../Interface/Option.js";
+
+const { gray, red } = await import("kleur/colors");
+
+const { default: Directory } = await import("../Function/Directory.js");
+
+const { Buffer: _Buffer } = await import("buffer");

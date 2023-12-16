@@ -1,3 +1,12 @@
+## 2.2.5
+
+-   Bug fix
+
+## 2.2.4
+
+-   Cleanup
+-   Colorizes output
+
 ## 2.2.3
 
 -   Cleanup

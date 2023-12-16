@@ -2,7 +2,9 @@
  * @module Integration
  *
  */
-import { bgGreen, cyan } from 'kleur/colors'
+
+// TODO: Test this for security
+export let System: string;
 
 export default ((...[_Option = {}]: Parameters<Type>) => {
 	Object.entries(_Option).forEach(([Key, Value]) =>
@@ -48,8 +50,28 @@ export default ((...[_Option = {}]: Parameters<Type>) => {
 	return {
 		name: "astro-compress",
 		hooks: {
+			"astro:config:done": async ({
+				config: {
+					outDir: { pathname },
+				},
+			}) => {
+				System = (await import("path"))
+					.parse(pathname)
+					.dir.replace(/\\/g, "/");
+
+				if (System.startsWith("/")) {
+					System = System.substring(1);
+				}
+			},
 			"astro:build:done": async ({ dir }) => {
-				process.stdout.write(`${bgGreen(" astro-compress processing ")}\n`);
+				console.log(
+					`\n${(await import("kleur/colors")).bgGreen(
+						(await import("kleur/colors")).black(
+							" AstroCompress processing "
+						)
+					)}`
+				);
+
 				if (typeof _Map !== "object") {
 					return;
 				}
@@ -73,7 +95,7 @@ export default ((...[_Option = {}]: Parameters<Type>) => {
 						!(Setting && _Map[File]) ||
 						typeof Setting !== "object"
 					) {
-						return;
+						continue;
 					}
 
 					_Action = Merge(
@@ -161,13 +183,19 @@ export default ((...[_Option = {}]: Parameters<Type>) => {
 							},
 							Fulfilled: async (Plan) =>
 								Plan.Files > 0
-									? "└▶ " + cyan(`Successfully compressed a total of ${Plan.Files
-										} ${File} ${Plan.Files === 1 ? "file" : "files"
-										} for ${await (
-											await import(
-												"files-pipe/Target/Function/Bytes.js"
-											)
-										).default(Plan.Info.Total)}.\n`)
+									? `${(await import("kleur/colors")).green(
+											`✓ Successfully compressed a total of ${
+												Plan.Files
+											} ${File} ${
+												Plan.Files === 1
+													? "file"
+													: "files"
+											} for ${await (
+												await import(
+													"files-pipe/Target/Function/Bytes.js"
+												)
+											).default(Plan.Info.Total)}.`
+										)}`
 									: false,
 						} satisfies Action)
 					);
@@ -204,6 +232,10 @@ export default ((...[_Option = {}]: Parameters<Type>) => {
 					}
 				}
 			},
+			// @TODO: Finish this
+			// "astro:config:setup": ({ addMiddleware }) => {
+			// 	addMiddleware();
+			// },
 		},
 	};
 }) satisfies Type as Type;

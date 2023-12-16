@@ -2,6 +2,7 @@
  * @module Integration
  *
  */
+export declare let System: string;
 declare const _default: Type;
 export default _default;
 import type Type from "../Interface/Integration.js";
@@ -114,16 +115,16 @@ export declare const Default: Omit<{} & {
         JavaScript: "terser";
         SVG: "svgo";
     };
+    Path: string;
     Cache: {
         Search: string;
         Folder: string;
     };
-    Path: string;
     Logger: 2;
     Action: Omit<{} & {
         Failed: ({ Input }: import("files-pipe/Target/Interface/File.js").default) => Promise<string>;
-        Passed: ({ Before, Buffer: _Buffer }: import("files-pipe/Target/Interface/File.js").default) => Promise<boolean>;
-        Accomplished: ({ Input, Before, After, Output }: import("files-pipe/Target/Interface/File.js").default) => Promise<string>;
+        Passed: ({ Before, Buffer }: import("files-pipe/Target/Interface/File.js").default) => Promise<boolean>;
+        Accomplished: ({ Input, Before, After }: import("files-pipe/Target/Interface/File.js").default) => Promise<string>;
         Changed: (Plan: import("files-pipe/Target/Interface/Plan.js").default) => Promise<any>;
         Read: ({ Input }: import("files-pipe/Target/Interface/File.js").default) => Promise<string>;
         Wrote: ({ Buffer }: import("files-pipe/Target/Interface/File.js").default) => Promise<import("files-pipe/Target/Type/Buffer.js").Type>;
