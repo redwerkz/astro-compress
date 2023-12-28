@@ -23,21 +23,21 @@ export default interface Type extends Option {
      *
      */
     Image?: boolean | {
-        "sharp"?: sharp;
+        sharp?: sharp;
     };
     /**
      * terser option properties
      *
      */
     JavaScript?: boolean | {
-        "terser"?: terser;
+        terser?: terser;
     };
     /**
      * svgo option properties
      *
      */
     SVG?: boolean | {
-        "svgo"?: svgo;
+        svgo?: svgo;
     };
     /**
      * Map to different file paths
