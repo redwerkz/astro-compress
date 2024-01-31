@@ -10,7 +10,7 @@ export default (async (...[Path]: Parameters<Type>) => {
 	Clean = Clean.replace(/\\/g, "/");
 	Clean = Clean.replace(
 		(await import("../Function/Integration.js")).System,
-		""
+		"",
 	);
 
 	if (!Clean.endsWith("/")) {

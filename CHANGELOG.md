@@ -1,3 +1,15 @@
+## 2.2.8
+
+-   Cleanup
+
+## 2.2.7
+
+-   Cleanup
+
+## 2.2.6
+
+-   Cleanup
+
 ## 2.2.5
 
 -   Bug fix
